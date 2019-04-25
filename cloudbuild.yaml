@@ -1,0 +1,10 @@
+steps:
+- name: 'heroku/buildpacks'
+  entrypoint: '/lifecycle/detector'
+  args: ['-app=/workspace']
+- name: 'heroku/buildpacks'
+  entrypoint: '/lifecycle/builder'
+  args: ['-app=/workspace']
+- name: 'heroku/buildpacks'
+  entrypoint: '/lifecycle/exporter'
+  args: ['-app=/workspace', '-image=heroku/buildpacks', 'gcr.io/$PROJECT_ID/$REPO_NAME' ]
