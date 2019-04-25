@@ -1,10 +1,21 @@
 steps:
 - name: 'heroku/buildpacks'
+  volumes:
+  - name: 'lifecycle'
+    path: '/lifecycle'
   entrypoint: '/lifecycle/detector'
-  args: ['-app=/workspace']
+  args: ['-app', '/workspace']
 - name: 'heroku/buildpacks'
+  volumes:
+  - name: 'layers'
+    path: '/layers'
   entrypoint: '/lifecycle/builder'
-  args: ['-app=/workspace']
+  args: ['-app', '/workspace', '-layers', '/layers']
 - name: 'heroku/buildpacks'
+  volumes:
+  - name: 'lifecycle'
+    path: '/lifecycle'
+  - name: 'layers'
+    path: '/layers'
   entrypoint: '/lifecycle/exporter'
-  args: ['-app=/workspace', '-image=heroku/buildpacks', 'gcr.io/$PROJECT_ID/$REPO_NAME' ]
+  args: ['-app', '/workspace', '-layers', '/layers', '-group', '/workspace/group.toml', '-image', 'heroku/buildpacks', 'gcr.io/$PROJECT_ID/$REPO_NAME']
